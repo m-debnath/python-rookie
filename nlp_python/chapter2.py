@@ -89,8 +89,45 @@ def generate_model(cfdist, word, num=15):
     for i in range(num):
         print(word + ' ', end = '')
         word = cfdist[word].max()
+    print()
         
 text = nltk.corpus.genesis.words('english-kjv.txt')
 bigrams = nltk.bigrams(text)
 cfdist = nltk.ConditionalFreqDist(bigrams)
 generate_model(cfdist, 'living')
+
+def unusual_words(text):
+    text_vocab = set(w.lower() for w in text if w.isalpha())
+    english_vocab = set(w.lower() for w in nltk.corpus.words.words())
+    unusual = text_vocab.difference(english_vocab)
+    return(sorted(unusual))
+
+from nltk.corpus import stopwords
+
+def content_percent(text):
+    stopwords = nltk.corpus.stopwords.words('english')
+    content = [w for w in text if w.lower() not in stopwords]
+    return(100 * (len(content) / len(text)))
+
+content_percent(nltk.corpus.reuters.words())
+
+cfd = nltk.ConditionalFreqDist(
+        (fileid, name[-1:])
+        for fileid in names.fileids()
+        for name in names.words(fileid))
+cfd.plot()
+
+entries = nltk.corpus.cmudict.entries()
+len(entries)
+for entry in entries[39943:39951]:
+    print(entry)
+
+for word, pron in entries:
+    if len(pron) == 3:
+        ph1, ph2, ph3 = pron
+        if ph1 == 'B' and ph3 == 'T':
+            print(word, ph2)
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+[s for s in sent_tokenize(example_text)]
+[w for w in word_tokenize(example_text)]
